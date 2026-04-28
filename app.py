@@ -132,4 +132,4 @@ def old_style_prediction(disaster):
     return f"{DISASTERS[disaster]['title']} Probability: {prob*100:.2f}% — {label}"
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)
