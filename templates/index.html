@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Disaster Prediction Dashboard</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root{--bg:#08111f;--card:rgba(255,255,255,.08);--border:rgba(255,255,255,.14)}
+body{min-height:100vh;background:radial-gradient(circle at top left,#1d4ed8 0,#08111f 34%,#020617 100%);color:#fff;font-family:Inter,Segoe UI,Arial,sans-serif}
+.hero{padding:42px 0 20px}.badge-soft{background:rgba(34,197,94,.14);color:#86efac;border:1px solid rgba(34,197,94,.25)}
+.glass{background:var(--card);border:1px solid var(--border);border-radius:24px;box-shadow:0 24px 70px rgba(0,0,0,.28);backdrop-filter:blur(14px)}
+.nav-pills .nav-link{color:#cbd5e1;border-radius:16px;margin:4px}.nav-pills .nav-link.active{background:#2563eb}
+.form-control{background:rgba(15,23,42,.82);border:1px solid rgba(148,163,184,.28);color:#fff}.form-control:focus{background:#0f172a;color:#fff;border-color:#60a5fa;box-shadow:none}.form-control::placeholder{color:#94a3b8}
+.result-card{border-radius:22px;padding:22px;border:1px solid var(--border);background:rgba(15,23,42,.7)}
+.safe{color:#22c55e}.warning{color:#f59e0b}.danger{color:#ef4444}
+.metric{font-size:42px;font-weight:800;line-height:1}.small-muted{color:#94a3b8}.footer{color:#94a3b8;font-size:13px}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="hero text-center">
+    <span class="badge badge-soft rounded-pill px-3 py-2 mb-3">AI + Flask + Interactive Dashboard</span>
+    <h1 class="display-5 fw-bold">🌍 Disaster Prediction System</h1>
+    <p class="lead small-muted">Predict Flood, Earthquake, Wild Fire, Cyclone, and Drought risk using model files and live inputs.</p>
+  </div>
+
+  <div class="glass p-3 p-md-4 mb-4">
+    <ul class="nav nav-pills justify-content-center mb-4" id="pills-tab" role="tablist">
+      {% for key, d in disasters.items() %}
+      <li class="nav-item" role="presentation">
+        <button class="nav-link {% if loop.first %}active{% endif %}" data-bs-toggle="pill" data-bs-target="#{{key}}" type="button">{{d.icon}} {{d.title}}</button>
+      </li>
+      {% endfor %}
+    </ul>
+
+    <div class="tab-content">
+      {% for key, d in disasters.items() %}
+      <div class="tab-pane fade {% if loop.first %}show active{% endif %}" id="{{key}}">
+        <div class="row g-4 align-items-stretch">
+          <div class="col-lg-5">
+            <div class="result-card h-100">
+              <h3 class="mb-1">{{d.icon}} {{d.title}} Prediction</h3>
+              <p class="small-muted mb-4">{{d.tip}}</p>
+              <form onsubmit="predict(event,'{{key}}')">
+                {% for feature in d.features %}
+                <label class="form-label text-capitalize">{{ feature.replace('_',' ') }} <span class="small-muted">({{d.units[loop.index0]}})</span></label>
+                <input class="form-control mb-3" name="{{feature}}" type="number" step="any" placeholder="Enter {{ feature.replace('_',' ') }}" required>
+                {% endfor %}
+                <button class="btn btn-primary btn-lg w-100 mt-2">Predict Risk</button>
+              </form>
+            </div>
+          </div>
+
+          <div class="col-lg-7">
+            <div class="result-card h-100">
+              <h4>Prediction Result</h4>
+              <div id="{{key}}_empty" class="small-muted py-5 text-center">Enter values and click Predict Risk.</div>
+              <div id="{{key}}_result" style="display:none">
+                <div class="d-flex align-items-end gap-3 mb-2">
+                  <div id="{{key}}_prob" class="metric">0%</div>
+                  <div>
+                    <div id="{{key}}_label" class="fs-4 fw-bold"></div>
+                    <div id="{{key}}_msg" class="small-muted"></div>
+                  </div>
+                </div>
+                <div class="progress mb-4" style="height:12px">
+                  <div id="{{key}}_bar" class="progress-bar" style="width:0%"></div>
+                </div>
+                <canvas id="{{key}}_chart" height="130"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <p class="footer text-center">Educational project only. This system gives estimated risk from input data and should not be used as an official emergency warning system.</p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const charts = {};
+async function predict(event, disaster){
+  event.preventDefault();
+  const form = event.target;
+  const data = {};
+  new FormData(form).forEach((value,key)=> data[key] = value);
+
+  const res = await fetch(`/api/predict/${disaster}`, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(data)
+  });
+  const out = await res.json();
+  if(!res.ok){ alert(out.error || "Prediction failed"); return; }
+
+  document.getElementById(`${disaster}_empty`).style.display = "none";
+  document.getElementById(`${disaster}_result`).style.display = "block";
+
+  const prob = document.getElementById(`${disaster}_prob`);
+  const label = document.getElementById(`${disaster}_label`);
+  const msg = document.getElementById(`${disaster}_msg`);
+  const bar = document.getElementById(`${disaster}_bar`);
+
+  prob.innerText = `${out.probability}%`;
+  label.innerText = out.label;
+  msg.innerText = out.message;
+  label.className = `fs-4 fw-bold ${out.level_class}`;
+  prob.className = `metric ${out.level_class}`;
+  bar.style.width = `${out.probability}%`;
+  bar.className = `progress-bar bg-${out.level_class === "danger" ? "danger" : out.level_class === "warning" ? "warning" : "success"}`;
+
+  const ctx = document.getElementById(`${disaster}_chart`);
+  if(charts[disaster]) charts[disaster].destroy();
+  charts[disaster] = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: out.features.map(x => x.replaceAll("_"," ")),
+      datasets: [{ label: "Input Values", data: out.values }]
+    },
+    options: {
+      plugins: { legend: { labels: { color: "#e5e7eb" } } },
+      scales: {
+        x: { ticks: { color: "#cbd5e1" }, grid: { color: "rgba(255,255,255,.08)" } },
+        y: { ticks: { color: "#cbd5e1" }, grid: { color: "rgba(255,255,255,.08)" } }
+      }
+    }
+  });
+}
+</script>
+</body>
+</html>
