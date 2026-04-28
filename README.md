@@ -1,35 +1,36 @@
 # 🌍 Disaster Prediction AI System
 
-🚀 **Live Demo:** https://disaster-preditcion.onrender.com
+![Python](https://img.shields.io/badge/Python-3.10-blue?logo=python)
+![Flask](https://img.shields.io/badge/Flask-2.3.3-black?logo=flask)
+![ML](https://img.shields.io/badge/Machine%20Learning-Scikit--Learn-orange)
+![Status](https://img.shields.io/badge/Status-Live-success)
+![Deployment](https://img.shields.io/badge/Deployed%20on-Render-purple)
+
+🚀 **Live Demo:**
+👉 https://disaster-preditcion.onrender.com
 
 ---
 
 ## 📌 Overview
 
-The **Disaster Prediction AI System** is a full-stack machine learning web application that predicts the likelihood of natural disasters such as:
+The **Disaster Prediction AI System** is a full-stack machine learning web application that predicts the likelihood of natural disasters using trained models.
 
-* 🌊 Flood
-* 🌍 Earthquake
-* 🔥 Fire
-* 🌪️ Cyclone
-* 🌵 Drought
-
-The system uses trained ML models and provides **real-time predictions** through an interactive web dashboard.
+It integrates multiple disaster prediction systems into a **single intelligent dashboard**, providing fast and accurate insights.
 
 ---
 
-## 🎯 Features
+## 🎯 Key Features
 
-✅ Predict multiple disasters in one dashboard
-✅ Machine Learning based predictions
-✅ Clean & responsive UI
-✅ Real-time results (no page reload)
-✅ Deployed live on cloud
-✅ GitHub-ready structure
+✨ Multi-disaster prediction (Flood, Earthquake, Fire, Cyclone, Drought)
+✨ Real-time predictions (no page reload)
+✨ Machine Learning powered backend
+✨ Clean & responsive UI
+✨ Fully deployed on cloud
+✨ Beginner-friendly + industry-ready
 
 ---
 
-## 🧠 Technologies Used
+## 🧠 Tech Stack
 
 ### 🔹 Backend
 
@@ -57,13 +58,13 @@ The system uses trained ML models and provides **real-time predictions** through
 
 ## 🏗️ Project Structure
 
-```
+```id="xljkhb"
 project/
 │
 ├── app.py
 ├── requirements.txt
 ├── runtime.txt
-├── *.pkl (trained models)
+├── *.pkl
 │
 ├── templates/
 │   └── index.html
@@ -73,52 +74,42 @@ project/
 
 ---
 
-## ⚙️ Installation & Setup
+## ⚙️ How to Run Locally
 
 ### 1️⃣ Clone Repository
 
+```id="eh8rp6"
+git clone https://github.com/kailashd112/Disaster_Preditcion.git
+cd Disaster_Preditcion
 ```
-git clone https://github.com/your-username/disaster-prediction-ai.git
-cd disaster-prediction-ai
-```
-
----
 
 ### 2️⃣ Create Virtual Environment
 
-```
+```id="y2u5jf"
 python -m venv venv
 ```
 
 Activate:
 
-**Windows**
-
-```
+```id="5c8d2z"
 venv\Scripts\activate
 ```
 
----
-
 ### 3️⃣ Install Dependencies
 
-```
+```id="wrrujx"
 pip install -r requirements.txt
 ```
 
----
-
 ### 4️⃣ Run Application
 
-```
+```id="j30pdc"
 python app.py
 ```
 
----
-
 ### 5️⃣ Open in Browser
 
-```
+```id="pcp1ku"
 http://127.0.0.1:5000/
 ```
 
@@ -126,37 +117,37 @@ http://127.0.0.1:5000/
 
 ## 🌐 Live Deployment
 
-👉 https://disaster-preditcion.onrender.com
+🔗 https://disaster-preditcion.onrender.com
 
 ---
 
 ## 🧪 Sample Inputs
 
-### 🌊 Flood
+| Disaster   | Inputs        | Output        |
+| ---------- | ------------- | ------------- |
+| Flood      | 80, 90, 85    | 🚨 Flood Risk |
+| Earthquake | 6.5, 10, 80   | 🚨 High Risk  |
+| Fire       | 40, 20, 30    | 🔥 Fire Risk  |
+| Cyclone    | 30, 100, 980  | 🌪️ Risk      |
+| Drought    | 38, 5, 20, 60 | 🌵 Risk       |
 
-* Rainfall: 80
-* River Level: 90
-* Soil Moisture: 85
+---
 
-### 🌍 Earthquake
+## 📸 Screenshots
 
-* Magnitude: 6.5
-* Depth: 10
-* Risk Score: 80
+*Add your project UI screenshots here*
 
-### 🔥 Fire
-
-* Temperature: 40
-* Humidity: 20
-* Wind Speed: 30
+```id="ycxm4g"
+screenshots/dashboard.png
+```
 
 ---
 
 ## 🚀 Future Enhancements
 
-* 📡 Real-time weather API integration
-* 🤖 AI-based explanation system
-* 📊 Prediction history & analytics
+* 📡 Real-time API integration
+* 🤖 AI explanation system
+* 📊 Prediction analytics dashboard
 * 📱 Mobile app version
 
 ---
@@ -164,6 +155,7 @@ http://127.0.0.1:5000/
 ## 👨‍💻 Author
 
 **Kailash Dake**
+🔗 https://github.com/kailashd112
 
 ---
 
@@ -171,7 +163,7 @@ http://127.0.0.1:5000/
 
 If you like this project:
 
-⭐ Star the repository
+⭐ Star the repo
 🍴 Fork it
 📢 Share it
 
@@ -179,6 +171,6 @@ If you like this project:
 
 ## 📢 Disclaimer
 
-This system is for **educational purposes only** and should not be used for real-world disaster management decisions.
+This project is for **educational purposes only** and should not be used for real-world disaster management decisions.
 
 ---
